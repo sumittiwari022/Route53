@@ -1,4 +1,4 @@
-zone "aws.clouddeepdive.org" { 
+zone "aws.ttnkss.org" { 
   type forward; 
   forward only;
   forwarders { INBOUND_ENDPOINT_IP1; INBOUND_ENDPOINT_IP2; }; 
