@@ -1,4 +1,4 @@
-Description:  CloudDeepDive-Route53 Hybrid DNS Demo - On-Prem CloufFormation yaml file
+Description:  Route53 Hybrid DNS Demo - On-Prem CloufFormation yaml file
 Parameters:
   LatestAmiId:
     Description: AMI for EC2 instances (default = AmaLinux Latest)
@@ -13,7 +13,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: CDD-onprem
+          Value: KSS-onprem
   SubnetPRIVATEA:
     Type: AWS::EC2::Subnet
     Properties:
@@ -22,14 +22,14 @@ Resources:
       CidrBlock: 192.168.10.0/25
       Tags:
         - Key: Name
-          Value: CDD-onprem-A
+          Value: KSS-onprem-A
   RouteTablePrivate: 
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref VPC
       Tags:
       - Key: Name
-        Value: CDD-ONPREM-RT
+        Value: KSS-ONPREM-RT
   SubnetPRIVATEB:
     Type: AWS::EC2::Subnet
     Properties:
@@ -38,7 +38,7 @@ Resources:
       CidrBlock: 192.168.10.128/25
       Tags:
         - Key: Name
-          Value: CDD-onprem-B
+          Value: KSS-onprem-B
   RouteTableAssociationPrivateA:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
@@ -97,7 +97,7 @@ Resources:
         - !Ref ONPREMSecurityGroup
       Tags:
         - Key: Name
-          Value: CDD-ONPREM-DNSA
+          Value: KSS-ONPREM-DNSA
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
@@ -123,13 +123,13 @@ Resources:
             bindkeys-file "/etc/named.iscdlv.key";
             managed-keys-directory "/var/named/dynamic";
           };
-          zone "corp.clouddeepdive.org" IN {
+          zone "corp.ttnkss.org" IN {
               type master;
-              file "corp.clouddeepdive.org.zone";
+              file "corp.ttnkss.org.zone";
               allow-update { none; };
           };
           EOF
-          cat <<EOF > /var/named/corp.clouddeepdive.org.zone
+          cat <<EOF > /var/named/corp.ttnkss.org.zone
           \$TTL 86400
           @   IN  SOA     ns1.mydomain.com. root.mydomain.com. (
                   2013042201  ;Serial
@@ -139,8 +139,8 @@ Resources:
                   86400       ;Minimum TTL
           )
           ; Specify our two nameservers
-              IN  NS    dnsA.corp.clouddeepdive.org.
-              IN  NS    dnsB.corp.clouddeepdive.org.
+              IN  NS    dnsA.corp.ttnkss.org.
+              IN  NS    dnsB.corp.ttnkss.org.
           ; Resolve nameserver hostnames to IP, replace with your two droplet IP addresses.
           dnsA    IN  A   1.1.1.1
           dnsB    IN  A   8.8.8.8
@@ -166,7 +166,7 @@ Resources:
         - !Ref ONPREMSecurityGroup
       Tags:
         - Key: Name
-          Value: CDD-ONPREM-DNSB
+          Value: KSS-ONPREM-DNSB
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
@@ -191,13 +191,13 @@ Resources:
             bindkeys-file "/etc/named.iscdlv.key";
             managed-keys-directory "/var/named/dynamic";
           };
-          zone "corp.clouddeepdive.org" IN {
+          zone "corp.ttnkss.org" IN {
               type master;
-              file "corp.clouddeepdive.org.zone";
+              file "corp.ttnkss.org.zone";
               allow-update { none; };
           };
           EOF
-          cat <<EOF > /var/named/corp.clouddeepdive.org.zone
+          cat <<EOF > /var/named/corp.ttnkss.org.zone
           \$TTL 86400
           @   IN  SOA     ns1.mydomain.com. root.mydomain.com. (
                   2013042201  ;Serial
@@ -207,8 +207,8 @@ Resources:
                   86400       ;Minimum TTL
           )
           ; Specify our two nameservers
-              IN  NS    dnsA.corp.clouddeepdive.org.
-              IN  NS    dnsB.corp.clouddeepdive.org.
+              IN  NS    dnsA.corp.ttnkss.org.
+              IN  NS    dnsB.corp.ttnkss.org.
           ; Resolve nameserver hostnames to IP, replace with your two droplet IP addresses.
           dnsA    IN  A   1.1.1.1
           dnsB    IN  A   8.8.8.8
@@ -234,7 +234,7 @@ Resources:
         - !Ref ONPREMSecurityGroup
       Tags:
         - Key: Name
-          Value: CDD-ONPREM-APP
+          Value: KSS-ONPREM-APP
   EC2Role:
     Type: 'AWS::IAM::Role'
     Properties:
