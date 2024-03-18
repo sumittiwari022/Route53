@@ -1,22 +1,22 @@
-Description:  CloudDeepDive-Route53 Hybrid DNS Demo - AWS CloufFormation yaml file
+Description:  Route53 Hybrid DNS Demo - AWS CloufFormation yaml file
 Parameters:
   LatestAmiId:
     Description: AMI for EC2 instances (default = AmaLinux Latest)
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
 Resources:
-  DNSCDDCOM:
+  DNSKSSCOM:
     Type: "AWS::Route53::HostedZone"
     Properties:
-      Name: 'aws.clouddeepdive.org'
+      Name: 'aws.ttnkss.org'
       VPCs:
         - VPCId: !Ref VPC
           VPCRegion: !Ref AWS::Region
-  DNSCDDCOMWEB:
+  DNSKSSCOMWEB:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !Ref DNSCDDCOM
-      Name: web.aws.clouddeepdive.org
+      HostedZoneId: !Ref DNSKSSCOM
+      Name: web.aws.ttnkss.org
       Type: A
       TTL: '60'
       ResourceRecords:
@@ -29,7 +29,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: CDD-aws
+          Value: KSS-aws
   SubnetPRIVATEA:
     Type: AWS::EC2::Subnet
     Properties:
@@ -38,14 +38,14 @@ Resources:
       CidrBlock: 10.16.32.0/20
       Tags:
         - Key: Name
-          Value: CDD-private-A
+          Value: KSS-private-A
   RouteTablePrivate: 
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref VPC
       Tags:
       - Key: Name
-        Value: CDD-AWS-RT
+        Value: KSS-AWS-RT
   SubnetPRIVATEB:
     Type: AWS::EC2::Subnet
     Properties:
@@ -54,7 +54,7 @@ Resources:
       CidrBlock: 10.16.96.0/20
       Tags:
         - Key: Name
-          Value: CDD-private-B
+          Value: KSS-private-B
   RouteTableAssociationPrivateA:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
@@ -113,7 +113,7 @@ Resources:
         - !Ref AWSSecurityGroup
       Tags:
         - Key: Name
-          Value: CDD-AWS-EC2-A
+          Value: KSS-AWS-EC2-A
   EC2Role:
     Type: 'AWS::IAM::Role'
     Properties:
